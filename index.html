@@ -24,7 +24,7 @@
   html { -webkit-text-size-adjust: 100%; }
   body {
     margin: 0;
-    background: var(--bg-soft);
+    background: var(--bg);
     color: var(--text);
     font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕", sans-serif;
     font-size: 1rem;
@@ -48,6 +48,7 @@
 
   .card {
     background: var(--bg);
+    border: 0.0625rem solid var(--line);
     border-radius: 1rem;
     padding: 1.25rem 1rem;
     display: flex;
@@ -187,7 +188,7 @@
 
   <input type="file" id="picker" accept="application/pdf,.pdf" multiple class="sr-only" tabindex="-1" aria-hidden="true">
 
-  <section class="card" id="card" aria-labelledby="listTitle">
+  <section class="card" id="card" aria-label="합칠 파일">
     <!-- 빈 화면 -->
     <div class="empty" id="empty">
       <div class="big-icon">
@@ -381,6 +382,8 @@
   if (window.Sortable) {
     Sortable.create(list, {
       handle: ".handle",
+      forceFallback: true,
+      fallbackTolerance: 3,
       animation: reduceMotion ? 0 : 150,
       ghostClass: "sortable-ghost",
       chosenClass: "sortable-chosen",
@@ -437,7 +440,6 @@
     }).then(function () {
       return out.save();
     }).then(function (bytes) {
-      window.__lastMerged = bytes;
       download(bytes, "합친문서.pdf");
       showMsg("ok", ICON.check + '<div class="msg-body"><span><strong>다 합쳤어요</strong></span><span>합친문서.pdf 파일을 내려받았어요. 모두 ' + out.getPageCount() + '쪽이에요.</span></div>');
     }).catch(function () {
